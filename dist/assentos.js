@@ -94,7 +94,8 @@ const cabine=(()=>{
   }
   function amount(){
     const {beneficio,passagens,adicionais,total}=precificacao.resumo(search,flight);
-    return `${beneficio.plano?beneficios.detalhe(beneficio):'<div><span>Passagens</span><b>'+money(passagens)+'</b></div>'}<div><span>Escolha de assentos</span><b>${money(adicionais)}</b></div><div class="seat-grand"><strong>Total da viagem</strong><strong>${money(total)}</strong></div>`;
+    const ground=transporteCore.quote(transporte.selected(search,flight));
+    return `${beneficio.plano?beneficios.detalhe(beneficio):'<div><span>Passagens</span><b>'+money(passagens)+'</b></div>'}<div><span>Escolha de assentos</span><b>${money(adicionais)}</b></div>${ground.subtotal?'<div><span>Transporte terrestre</span><b>'+money(ground.subtotal/100)+'</b></div><div><span>Desconto do transporte</span><b>− '+money(ground.discount/100)+'</b></div>':''}<div class="seat-grand"><strong>Total da viagem</strong><strong>${money((Math.round(total*100)+ground.total)/100)}</strong></div>`;
   }
   function roster(){
     const p=partyFor(search);

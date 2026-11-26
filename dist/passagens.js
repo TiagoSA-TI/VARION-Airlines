@@ -62,7 +62,7 @@ function restoreSelection() {
   } catch {}
 }
 restoreSelection();
-function resetSelection(){outbound=null;flight=null;draft=null;saveSelection()}
+function resetSelection(){outbound=null;flight=null;draft=null;saveSelection();transporte.clear()}
 function bookDestination(code,offerDate) {
   if(!rede.porCodigo[code])return;
   plan.from=rede.hub;plan.to=code;

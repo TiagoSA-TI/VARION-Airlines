@@ -1,0 +1,27 @@
+'use strict';
+const assert=require('node:assert/strict');
+const C=require('../dist/transporte-core.js');
+const now=Date.parse('2026-12-10T00:00:00-03:00');
+let count=0;
+function check(v,message){assert.ok(v,message);count++}
+const s=C.slots('CNF','to','2026-12-11',now)[0],t=C.slots('CNF','from','2026-12-12',now)[0];
+check(C.routes.length===4,'4 routes');
+check(C.routes.every(r=>C.slots(r.code,'to','2026-12-11',now).length&&C.slots(r.code,'from','2026-12-11',now).length),'both directions');
+check(C.quote([{...s,passengers:[0]}]).total===3990,'one leg');
+check(C.quote([{...s,passengers:[0]},{...t,passengers:[0]}]).total===7182,'round trip');
+check(C.quote([{...s,passengers:[0,1]},{...t,passengers:[0]}]).total===11172,'partial passenger discount');
+check(C.quote([{...s,passengers:[0]},{...t,passengers:[1]}]).discount===0,'different passengers');
+check(C.quote([{...s,passengers:[0,0]},{...s,passengers:[0]}]).subtotal===3990,'duplicates');
+check(C.quote([{...s,passengers:[0]},{...t,code:'GRU',passengers:[0]}]).discount===0,'different routes');
+check(C.quote([]).total===0,'no selection');
+const early={start:Date.parse('2026-12-11T03:00:00-03:00'),end:Date.parse('2026-12-11T05:00:00-03:00')};
+check(C.compatible('CNF','to',early,false,now).some(x=>C.dateAt(x.start)==='2026-12-10'),'previous day');
+check(C.compatible('CNF','to',early,true,now).every(x=>early.start-x.end>=180*60000),'international margin');
+check(C.compatible('CNF','to',early,false,now).every(x=>early.start-x.end>=120*60000),'domestic margin');
+const late={start:early.start,end:Date.parse('2026-12-11T23:45:00-03:00')};
+check(C.compatible('REC','from',late,false,now).some(x=>C.dateAt(x.start)==='2026-12-12'),'next day');
+check(C.compatible('REC','from',late,false,now).every(x=>x.start-late.end>=45*60000),'arrival margin');
+check(C.slots('CNF','to','2026-02-30',now).length===0,'invalid date');
+check(C.slots('CNF','to','2026-12-09',now).length===0,'past');
+check(C.compatible('BSB','to',early,false,now).length===0,'unserved airport');
+console.log(count+' verificações de transporte aprovadas.');

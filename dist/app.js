@@ -4,6 +4,7 @@ const paths = {
  plane:'<path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="m11 13 7-7"/>',
  fly:'<path d="m22 2-1.5 5-4.8 4.8 2.2 7.3-2 2-4.2-6.1-4 3.2-.4 3.1-1.5 1-1.6-4.4-4.1-1.5 1-1.5 3.1-.3 3.2-4.1-6-4.1 1.9-2 7.2 2.1L17 4c1.2-1.2 3.1-2 5-2Z"/>',
  ticket:'<path d="M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4Z"/><path d="M15 7.5v1m0 3v1m0 3v1"/>',
+ bus:'<rect x="4" y="3" width="16" height="16" rx="4"/><path d="M4 11h16M7 19v2m10-2v2M8 15h1m6 0h1M12 3v8"/>',
  menu:'<path d="M3 6h18M3 12h18M3 18h18"/>',
  pin:'<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.4"/>',
  calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18"/>',
@@ -37,7 +38,9 @@ const field=(label,name,type,val='',props='')=>'<label class="formfield">'+label
 const lookupForm=()=>'<form id="lookupform" class="lookupform"><label class="formfield">Código da reserva<input name="code" placeholder="Ex.: VR7K3P" maxlength="12" required autocapitalize="characters" spellcheck="false" autocomplete="off"></label><button class="primary">'+icon('search')+' Consultar reserva</button></form><p id="lookup-status" class="error" role="status"></p>';
 function booking(){return '<div class="tabs"><button type="button" data-tab="busca" class="tab '+(tab==='busca'?'active':'')+'" aria-pressed="'+(tab==='busca')+'">'+icon('fly')+' Voos</button><button type="button" data-tab="reservas" class="tab '+(tab==='reservas'?'active':'')+'" aria-pressed="'+(tab==='reservas')+'">'+icon('ticket')+' Minhas reservas</button></div>'+(tab==='busca'?searchForm():'<div class="inline-lookup">'+lookupForm()+'</div>')}
 const rows = items=>'<dl class="facts">'+items.map(([title,value,cls])=>'<div class="'+(cls||'')+'"><dt>'+title+'</dt><dd>'+value+'</dd></div>').join('')+'</dl>';
-function summary(q,f,names=[],savedExtra,savedBenefit) {
+function summary(q,f,names=[],savedExtra,savedBenefit,savedTransport) {
+ const ground=savedTransport===undefined?transporte.selected(q,f):savedTransport;
+ const groundPrice=transporteCore.quote(ground);
  const legs=bookingLegs(f),{beneficio,passagens,adicionais,total}=precificacao.resumo(q,f,savedExtra,savedBenefit);
  const details=legs.map((leg,i)=>{
    const items=[[i?'Volta':'Ida',leg.from?routeName(leg):routeName(q)],['Data',dateText(leg.date||q.date)],['Voo',esc(leg.number)]];
@@ -48,17 +51,18 @@ function summary(q,f,names=[],savedExtra,savedBenefit) {
  }).join('');
  const prices=[['Passageiros',passengerDescription(partyFor(q))]];
  if(frota[f.aircraft])prices.push([beneficio.plano?'Passagens com desconto':'Passagens',money(passagens)],['Adicional de assentos',money(adicionais)]);
- return details+beneficios.detalhe(beneficio)+rows([...prices,['Total da viagem',money(total),'total']]);
+ return details+beneficios.detalhe(beneficio)+transporte.details(ground,names)+rows([...prices,...transporte.priceRows(ground),['Total da viagem',money((Math.round(total*100)+groundPrice.total)/100),'total']]);
 }
 function passengerForm(){
  const names=Array.from({length:search.count},(_,i)=>field('Nome completo · '+travelerTitle(search,i),'name'+i,'text',draft?.names[i]||'','maxlength="90" minlength="2" placeholder="Ex.: Ana Oliveira"')).join('');
  return section('Dados dos passageiros','Use um nome e um e-mail de exemplo para continuar.','<div class="split"><form class="panel" id="passengerform"><h2>Quem vai viajar?</h2>'+names+beneficios.declaracao(search)+field('E-mail de contato','email','email',draft?.email||'','maxlength="120" placeholder="ana@example.com"')+'<div class="actions"><button class="primary">Revisar viagem</button><a class="link" href="#assentos">Alterar assentos</a></div></form><aside class="panel"><h2>Resumo da viagem</h2><div data-benefit-summary aria-live="polite">'+summary(search,flight)+'</div></aside></div>')
 }
-function review(){return section('Confira sua viagem','Confira o trecho, os horários e os dados dos passageiros.','<div class="panel">'+summary(search,flight,draft.names)+rows([['Passageiros',draft.names.map(esc).join('<br>')],['Contato',esc(draft.email)]])+'<p class="note">Esta reserva é ilustrativa e fica salva neste navegador. A confirmação não gera cobrança nem passagem válida para embarque.</p><div class="actions"><button class="primary" data-confirm>Confirmar reserva</button><a class="link" href="#passageiros">Corrigir dados</a><a class="link" href="#assentos">Alterar assentos</a></div><p id="save-status" class="error" role="status"></p></div>',true)}
-function ticket(r){const {query:q,flight:f}=r;return '<article class="ticket"><div class="tickethead">'+brand+'<span>Reserva ilustrativa</span></div><div class="ticketbody"><div class="airline"><b>'+q.from+'</b><span></span>'+icon('fly')+'<span></span><b>'+q.to+'</b></div>'+summary(q,f,r.names,r.seatTotal??bookingLegs(f).reduce((v,l)=>v+seatFees(l,true),0),r.beneficio??null)+rows([['Passageiro'+(r.names.length>1?'s':''),r.names.map(esc).join('<br>')]])+'</div><div class="codearea"><small>Código da reserva</small><strong>'+esc(r.code)+'</strong></div></article>'}
+function review(){return section('Confira sua viagem','Confira o trecho, os horários e os dados dos passageiros.',transporte.integrated(search,flight,draft.names)+'<div class="panel"><div data-ground-summary aria-live="polite">'+summary(search,flight,draft.names)+'</div>'+rows([['Passageiros',draft.names.map(esc).join('<br>')],['Contato',esc(draft.email)]])+'<p class="note">Esta reserva é ilustrativa e fica salva neste navegador. A confirmação não gera cobrança nem passagem válida para embarque.</p><div class="actions"><button class="primary" data-confirm>Confirmar reserva</button><a class="link" href="#passageiros">Corrigir dados</a><a class="link" href="#assentos">Alterar assentos</a></div><p id="save-status" class="error" role="status"></p></div>',true)}
+function ticket(r){const {query:q,flight:f}=r;return '<article class="ticket"><div class="tickethead">'+brand+'<span>Reserva ilustrativa</span></div><div class="ticketbody"><div class="airline"><b>'+q.from+'</b><span></span>'+icon('fly')+'<span></span><b>'+q.to+'</b></div>'+summary(q,f,r.names,r.seatTotal??bookingLegs(f).reduce((v,l)=>v+seatFees(l,true),0),r.beneficio??null,r.transport??[])+rows([['Passageiro'+(r.names.length>1?'s':''),r.names.map(esc).join('<br>')]])+'</div><div class="codearea"><small>Código da reserva</small><strong>'+esc(r.code)+'</strong></div></article>'}
 function getRecord(code){const raw=localStorage.getItem(storagePrefix+code);return raw?JSON.parse(raw):null}
 function recordPage(confirmed,code){
  let r;try{r=getRecord(code)}catch{}if(!r)return reservationPage();
+ if(r.groundOnly)return transporte.receipt(r,confirmed);
  let body=ticket(r);
  if(confirmed)body+='<div class="actions"><a class="primary" href="#reservas">Ir para Minhas reservas</a><a class="secondary" href="#inicio">Voltar ao início</a></div>';
  else body+='<form id="contactform" class="panel"><h2>Contato da reserva</h2>'+field('E-mail de contato','email','email',r.email,'maxlength="120"')+'<button class="primary">Salvar alteração</button><p id="contact-status" role="status"></p></form><div class="actions"><a class="link" href="#reservas">Consultar outra reserva</a></div>';
@@ -80,6 +84,7 @@ function services() {
   ['search','Buscar voos','Compare horários e tarifas para o seu destino.','#buscar'],
   ['fly','Classe executiva','Conheça a cabine e os serviços do Boeing 737 MAX 8.','#servicos/executiva'],
   ['people','Planos de benefícios','Descontos nas passagens para duplas, grupos e estudantes.','#beneficios'],
+  ['bus','Transporte ao aeroporto','Reserve seu traslado entre rodoviária e aeroporto.','#servicos/transporte'],
   ['land','Painel de voos','Consulte partidas e chegadas em Confins.','#painel'],
   ['ticket','Consultar reserva','Veja os passageiros, o horário e o código do seu voo.','#reservas'],
   ['people','Atualizar e-mail de contato','Abra sua reserva para editar o endereço de e-mail.','#reservas']
@@ -109,7 +114,7 @@ function render(){
  case 'companhia':
   main.innerHTML=company();
   break;
- case 'servicos':main.innerHTML=code==='executiva'?paginaExecutiva():services();break;
+ case 'servicos':main.innerHTML=code==='executiva'?paginaExecutiva():code==='transporte'?transporte.page():services();break;
  case 'atendimento':main.innerHTML=support();break;
  case 'reservas':main.innerHTML=reservationPage();break;
  case 'voos':main.innerHTML='<div class="flight-results">'+results(code==='volta' && search.round && !!outbound)+'</div>';break;
@@ -119,6 +124,7 @@ function render(){
  case 'emitida':case 'reserva':activeCode=code||'';main.innerHTML=recordPage(page==='emitida',activeCode);break;
  default:if(page==='buscar')tab='busca';main.innerHTML=home();break
  }
+ const groundForm=main.querySelector('#groundform');if(groundForm)transporte.updateForm(groundForm);
  document.title=(main.querySelector('h1')?.innerText.replace(/\n/g,' ')||'Voos e reservas')+' | VARION Airlines';
  if(page==='buscar'){document.querySelector('#booking').scrollIntoView({block:'center'});document.querySelector('#booking').setAttribute('tabindex','-1');document.querySelector('#booking').focus({preventScroll:true})}else{window.scrollTo(0,0);if(location.hash)main.focus({preventScroll:true})}
 }
@@ -127,6 +133,8 @@ bindSearch(main);
 main.addEventListener('click',cabine.click);
 main.addEventListener('keydown',cabine.key);
 main.addEventListener('change',e=>{
+ if(transporte.changeIntegrated(e))return;
+ if(e.target.closest('#groundform')){transporte.updateForm(e.target.closest('#groundform'));return}
  if(e.target.matches('[data-student]')){
   search.students=Array.from(main.querySelectorAll('[data-student]:checked'),input=>input.dataset.student);
   remember();setPlanFromResults();saveSelection();
@@ -173,13 +181,14 @@ main.addEventListener('click',e=>{
   try{
    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code;
    do{const vals=crypto.getRandomValues(new Uint8Array(6));code=Array.from(vals,n=>chars[n%chars.length]).join('')}while(localStorage.getItem(storagePrefix+code));
-   const r={code,beneficio:precificacao.resumo(search,flight).beneficio,seatTotal:precificacao.resumo(search,flight).adicionais,query:{...search},flight:{...flight},names:[...draft.names],email:draft.email};
+   const r={code,beneficio:precificacao.resumo(search,flight).beneficio,seatTotal:precificacao.resumo(search,flight).adicionais,transport:transporte.selected(search,flight),query:{...search},flight:{...flight},names:[...draft.names],email:draft.email};
    localStorage.setItem(storagePrefix+code,JSON.stringify(r));resetSelection();go('emitida/'+code)
   }catch{el.disabled=false;document.querySelector('#save-status').textContent='Não foi possível salvar a reserva. Permita o armazenamento neste navegador e tente novamente.'}
  }
 });
 main.addEventListener('submit',e=>{
  e.preventDefault();const f=e.target,fd=new FormData(f);
+ if(f.id==='groundform'){transporte.confirm(f);return}
  if(f.id==='searchform'){submitSearch(f);return}
  if(f.id==='passengerform'){
   const names=Array.from({length:search.count},(_,i)=>String(fd.get('name'+i)).trim());

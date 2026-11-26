@@ -62,3 +62,7 @@ Em **Settings → Pages → Build and deployment**, selecione **Deploy from a br
 - **ChatGPT Sites:** o manifesto original `.openai/hosting.json` foi omitido desta distribuição pública. O site executa inteiramente no navegador, independentemente do ChatGPT.
 - **Canva:** a página usa o endereço público de visualização fornecido pelo grupo em um iframe. A integração acompanha o código. Os slides e suas animações são carregados pelo Canva e dependem de internet e da permissão de visualização do design. Se sua hospedagem definir uma política CSP, permita a origem https://www.canva.com em frame-src.
 - **Dados da viagem:** a malha, os preços, os planos, os assentos e os voos simulados estão no JavaScript. Buscas e trechos em andamento usam sessionStorage. As reservas confirmadas usam localStorage. Cada navegador e origem mantêm seus próprios registros. Ao mudar de domínio, as reservas feitas no domínio antigo continuam vinculadas a ele.
+
+## Transporte terrestre
+
+O serviço fica em Serviços → Transporte ao aeroporto, ou como adicional na revisão da reserva aérea. As rotas, tarifas em centavos, horários e margens estão em `dist/transporte-core.js`; a interface fica em `dist/transporte.js` e `dist/transporte.css`. O desconto de 10% é aplicado aos pares de trechos da mesma rota para o mesmo passageiro. As reservas de transporte também são consultáveis pelo código no mesmo navegador. Para verificar as regras sem dependências, execute `node tests/transporte.test.cjs` com Node.js. O site continua estático e sem comando de build.
