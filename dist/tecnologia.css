@@ -1,0 +1,34 @@
+@font-face {
+  font-family: Montserrat;
+  src: url('assets/montserrat.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+#route-content:focus { outline: none; }
+.canva-intro, .canva-credit { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.canva-intro { padding-block:18px; font-size:.85rem; }
+.canva-intro h1 { font-size:clamp(1.45rem,2.5vw,2.35rem); margin:5px 0 0; }
+.canva-credit { font-size:.86rem; padding-block:12px 22px; }
+.canva-credit a { color:#54269b; text-decoration:underline; }
+.canva-stage { display:grid; place-items:center; position:relative; background:#10182b; }
+.canva-screen { width:min(100%,177.7778vh); width:min(100%,177.7778dvh); aspect-ratio:16/9; position:relative; }
+.canva-screen iframe { position:absolute; inset:0; width:100%; height:100%; border:0; display:block; background:white; }
+.canva-presenting { overflow:hidden; }
+.canva-presenting > header,.canva-presenting > footer,.canva-presenting > .skip,
+.canva-presenting .canva-intro,.canva-presenting .canva-credit { display:none; }
+.canva-presenting .canva-stage { position:fixed; inset:0; z-index:10; }
+.canva-actions { position:absolute; left:max(4px,env(safe-area-inset-left)); top:max(4px,env(safe-area-inset-top)); display:flex; align-items:start; gap:4px; }
+.canva-reveal,.canva-actions a,#tech-return a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:8px 13px; border-radius:8px; border:0; color:white; background:#142d59; font:600 .87rem Montserrat,Arial,sans-serif; }
+.canva-reveal { width:44px; opacity:0; transition:opacity .18s ease; }
+#canva-tools { display:flex; gap:2px; padding:2px; border-radius:9px; background:#142d59; opacity:0; visibility:hidden; transition:opacity .18s ease, visibility 0s linear .18s; }
+.canva-actions:not(.is-visible) { pointer-events:none; }
+.canva-reveal { pointer-events:auto; }
+.canva-actions.is-visible .canva-reveal,.canva-reveal:focus-visible { opacity:1; }
+.canva-actions.is-visible #canva-tools { visibility:visible; opacity:1; transition-delay:0s; }
+#canva-tools a:hover { background:#54269b; }
+#tech-return { position:sticky; top:0; z-index:9; display:flex; justify-content:center; background:#eee8f6; padding:4px; }
+#tech-return a { background:#54269b; }
+@media(prefers-reduced-motion:reduce) {
+  .canva-actions * { transition:none!important; }
+}

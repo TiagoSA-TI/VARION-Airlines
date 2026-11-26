@@ -1,0 +1,31 @@
+.fare-flight{border-top:1px solid #c5cbd3;color:#142d59}
+.fare-flight:last-child{border-bottom:1px solid #c5cbd3}
+.flight-toggle{width:100%;display:grid;grid-template-columns:minmax(120px,.78fr) minmax(240px,1.65fr) minmax(140px,.85fr);align-items:center;gap:clamp(12px,2vw,34px);text-align:left;padding:20px 10px;background:#fff;color:inherit;font:inherit;border:0;cursor:pointer;transition:background .2s}
+.flight-toggle:hover,.flight-toggle[aria-expanded=true]{background:#f8f7fb}
+.fare-itinerary{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:6px}
+.fare-itinerary strong,.fare-unit{font-size:clamp(1.15rem,2vw,1.65rem);letter-spacing:-.045em}
+.fare-itinerary small,.fare-low small,.fare-column>small{display:block;color:#516079;font-size:.74rem;font-weight:500}
+.fare-line{text-align:center;color:#54269b}.fare-line .ico{width:17px;height:17px}
+.fare-low{text-align:right}.fare-low b,.fare-low span{display:block}.fare-low b{font-size:1.3rem}.fare-low span{font-size:.76rem;margin-top:3px;color:#54269b;font-weight:650}.fare-low i{display:inline-block;transition:transform .2s;font-style:normal}
+[aria-expanded=true] .fare-low i{transform:rotate(180deg)}
+.fare-fold{display:grid;grid-template-rows:1fr;transition:grid-template-rows .24s ease,opacity .2s;opacity:1}.fare-fold[inert]{grid-template-rows:0fr;opacity:0}.fare-fold>div{overflow:hidden;min-height:0}
+.fare-matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(185px,100%),1fr));gap:clamp(6px,1vw,16px);padding:9px 0 22px}
+.fare-column{display:flex;flex-direction:column;border:1px solid #d6dbe3;border-top:3px solid #ad9fc4;background:white;padding:clamp(12px,1.45vw,23px);min-width:0}
+.fare-column h3{font-size:1.18rem;margin:0 0 8px}.fare-column h4{font-size:.77rem;margin:16px 0 4px;color:#54269b}
+.fare-column ul{padding-left:1.1em;margin:0 0 4px;font-size:.81rem;line-height:1.48}.fare-column li+li{margin-top:4px}.fare-column li::marker{color:#9280ac}.fare-column ul:last-of-type{margin-bottom:18px}
+.fare-party{font-size:.76rem;margin:5px 0 0}.fare-column button{margin-top:auto;font-size:.8rem;width:100%;padding:10px 5px}.fare-column button:disabled{opacity:.56;cursor:default}
+.business-fare{background:#f4f6fa;border-top-color:#142d59}.business-fare .primary{background:#142d59}.business-fare h4{color:#142d59}
+.seat-glyph.business.available,.seat-sample.business.available{--edge:#243d63;--shell:#738ba8;--pan:#cbd7e4;--back:#9aaeca}
+.seat-glyph.other,.seat-sample.other{--shell:#e8eaed;--pan:#f6f6f7;--back:#e5e8eb;--edge:#b9c0c8;--mark:#7d8794}
+.cabin-divider path{stroke:#91a0b4;stroke-width:2}.cabin-drawing .cabin-divider text{font-size:10px;letter-spacing:1.3px;font-weight:700;fill:#304768}
+.exec-hero{display:grid;grid-template-columns:4fr 6fr;background:#142d59;color:white;align-items:stretch}
+.exec-hero>div{align-self:center;padding:clamp(22px,4vw,66px)}.exec-hero>img{width:100%;height:100%;min-height:310px;max-height:540px;object-fit:cover}
+.exec-hero p{line-height:1.55;color:#edf1f7}.exec-hero p:first-child{font-size:.83rem;color:#c5cbd3;font-weight:600}
+.exec-page .exec-hero h1{color:white;line-height:1.04;margin:0;letter-spacing:-.055em;font-size:clamp(2.4rem,4.6vw,4.8rem)}
+.exec-hero a{display:inline-block;color:white;border-bottom:1px solid #c5cbd3;margin-top:10px;padding:6px 0;font-weight:650}
+.exec-moments{display:grid;grid-template-columns:1fr 1.55fr 1fr;gap:clamp(16px,3vw,48px);margin:32px 0}
+.exec-moments section{border-top:2px solid #54269b}.exec-moments h2{font-size:1.3rem}.exec-moments ul{padding:0;list-style:none}.exec-moments li{padding:8px 0;border-bottom:1px solid #d8dde3;font-size:.9rem}.exec-note{padding:16px 0;border-top:1px solid #c5cbd3;font-size:.9rem}
+@media(max-width:700px){.flight-toggle{grid-template-columns:1fr auto}.fare-itinerary{grid-row:2;grid-column:1/-1}.fare-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}.exec-hero,.exec-moments{grid-template-columns:1fr}.exec-hero>img{min-height:0;height:auto}.fare-column{padding:10px}.fare-column .fare-unit{font-size:1.13rem}}
+@media(prefers-reduced-motion:no-preference){.exec-hero>div,.exec-moments{animation:seat-enter .32s ease-out}}
+@media(prefers-reduced-motion:reduce){.fare-fold,.flight-toggle,.fare-low i{transition:none}}
+.fare-column details{font-size:.78rem;color:#142d59}.fare-column summary{cursor:pointer;padding:5px 0;font-weight:650}

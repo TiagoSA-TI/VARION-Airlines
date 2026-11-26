@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#54269B">
+  <title>VARION Airlines | Voos e reservas</title>
+  <meta name="description" content="Planeje sua viagem com a VARION. Explore destinos no Brasil e na América do Sul, compare horários de voos e consulte sua reserva.">
+  <link rel="icon" href="assets/marca.png">
+  <link rel="preload" href="assets/montserrat.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tecnologia.css">
+  <link rel="stylesheet" href="viagem.css">
+  <script src="tecnologia.js" defer></script>
+  <script src="tarifas.js" defer></script>
+  <script src="frota.js" defer></script>
+  <link rel="stylesheet" href="beneficios.css">
+  <script src="beneficios.js" defer></script>
+  <script src="precos.js" defer></script>
+  <script src="voos.js" defer></script>
+  <link rel="stylesheet" href="malha.css">
+  <script src="geografia.js" defer></script>
+  <script src="seletores.js" defer></script>
+  <script src="passagens.js" defer></script>
+  <script src="explorar.js" defer></script>
+  <link rel="stylesheet" href="planejar.css">
+  <script src="calendario.js" defer></script>
+  <link rel="stylesheet" href="assentos.css">
+  <link rel="stylesheet" href="tarifas.css">
+  <script src="assentos.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Pular para o conteúdo</a>
+  <aside id="tech-return" aria-label="Demonstração do site" hidden><a href="#companhia/apresentar">Voltar à apresentação</a></aside>
+  <header><div class="wrap bar">
+    <a href="#inicio" class="brand" aria-label="VARION, página inicial"><img src="assets/marca.png" alt=""><img src="assets/nome.png" alt="VARION"></a>
+    <nav id="navigation" aria-label="Menu principal">
+      <a href="#destinos">Destinos</a><a href="#malha">Mapa de rotas</a><a href="#servicos">Serviços</a><a href="#companhia">Companhia</a><a href="#atendimento">Atendimento</a>
+    </nav>
+    <a class="reserve-link" href="#reservas"><i data-icon="ticket"></i><span>Minhas reservas</span></a>
+    <button class="menu-toggle" aria-controls="navigation" aria-expanded="false" aria-label="Abrir menu"><i data-icon="menu"></i></button>
+  </div></header>
+  <main id="main" tabindex="-1">
+    <div id="route-content" tabindex="-1"></div>
+    <section id="canva-show" aria-label="Tecnologia e Inovação" hidden>
+      <div class="canva-intro wrap">
+        <div><a href="#companhia">Companhia</a> / Quem somos<h1>Tecnologia e Inovação</h1></div>
+        <a class="primary" href="#companhia/apresentar">Apresentar</a>
+      </div>
+      <div class="canva-stage">
+        <div class="canva-screen"></div>
+        <div class="canva-actions" hidden>
+          <button type="button" class="canva-reveal" aria-label="Mostrar controles da VARION" aria-controls="canva-tools" aria-expanded="false">•••</button>
+          <div id="canva-tools" aria-label="Controles da VARION" role="group" inert>
+            <a href="#inicio" data-demo>Demonstrar site</a>
+            <a href="#companhia/quem-somos">Fechar</a>
+          </div>
+        </div>
+      </div>
+      <div class="canva-credit wrap"><span>Para demonstrar o site, use o canto superior esquerdo ou a tecla Tab.</span>
+        <span>Por Tecnologia da Informação · VARION · <a href="https://www.canva.com/design/DAHbwG4uaaA/Con643UnKq09c1_P31aFBg/view" target="_blank" rel="noopener">Abrir no Canva <span aria-hidden="true">↗</span></a></span>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap foot">
+    <a class="brand" href="#inicio" aria-label="VARION, início"><img src="assets/marca.png" alt=""><img src="assets/nome.png" alt="VARION"></a>
+    <div class="footlinks"><a href="#painel">Painel de voos</a><a href="#destinos">Destinos</a><a href="#reservas">Minhas reservas</a><a href="#atendimento">Atendimento</a></div>
+  </div><p class="wrap demo-foot">Voos e reservas simulados para demonstração.</p></footer>
+  <noscript>Ative o JavaScript para pesquisar voos e consultar reservas.</noscript>
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* Compact masthead and travel planner */
+.brand-horizon {position:relative;isolation:isolate;overflow:hidden;background:#142d59;color:white}
+.horizon-copy {position:relative;display:flex;flex-direction:column;justify-content:center;min-height:clamp(230px,19vw,302px);padding:24px 0 40px;pointer-events:none}
+.horizon-copy h1 {font-size:clamp(2.55rem,4.15vw,4.45rem);font-weight:650;line-height:1;letter-spacing:-.065em}
+.horizon-copy p {font-size:clamp(.87rem,1.2vw,1.08rem);margin:14px 0 0;max-width:42%;color:#edf0f8}
+.horizon-photo {position:absolute;inset:0 0 0 41%;clip-path:polygon(12% 0,100% 0,100% 100%,0 100%);background:#c5cbd3}
+.horizon-photo img {width:100%;height:100%;object-fit:cover;object-position:50% 56%;display:block}
+.brand-horizon:after {content:'';position:absolute;z-index:-1;left:40%;width:8%;top:0;bottom:0;background:#665398;transform:skewX(-19deg)}
+#booking {margin-top:-18px}
+#booking .route-fields {display:grid;grid-template-columns:minmax(0,1.27fr) minmax(0,1.27fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.83fr) auto;gap:8px;padding:19px 22px 23px}
+#booking .route-fields>.fieldbox,#booking .route-fields>.primary {grid-column:auto}
+.route-fields .fieldbox {height:64px;background:white;text-align:left}
+.route-fields .fieldbox:hover {border-color:#8c77a7}
+.route-fields .fieldbox:focus-within,.travel-date[aria-expanded=true] {border-color:var(--purple);background:#fbf9ff}
+.travel-date b {font-size:.92rem;font-weight:620;line-height:1.3}
+.travel-date .placeholder,.airport-field input::placeholder {color:#626c7d;font-weight:500;opacity:1}
+.fieldbox select {cursor:pointer}
+.route-fields .primary {align-self:stretch}
+.demo-foot {padding-bottom:16px;font-size:.73rem;color:var(--muted)}
+html {scrollbar-gutter:stable}
+.cal-open {overflow:hidden}
+.trip-calendar {position:fixed;inset:auto;max-width:calc(100vw - 24px);width:660px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);margin:0;padding:0;border:1px solid #d7d6df;border-radius:14px;background:#fff;color:var(--blue);box-shadow:0 18px 65px #07162e38;font-family:Montserrat,Arial,sans-serif;overflow:hidden;opacity:0;transform:translateY(4px);transition:opacity .13s ease,transform .13s ease}
+.trip-calendar[open] {display:flex;flex-direction:column}
+.trip-calendar.ready {opacity:1;transform:translateY(0)}
+.trip-calendar.closing {opacity:0;transform:translateY(3px);pointer-events:none}
+.trip-calendar::backdrop {background:rgb(15 30 55 / .15)}
+.cal-header,.cal-footer,.cal-nav,.cal-selection {flex-shrink:0}
+.cal-header {display:flex;align-items:center;justify-content:space-between;padding:14px 20px 8px}
+.cal-header h2 {font-size:1.4rem;letter-spacing:-.045em}
+.trip-calendar button {color:var(--blue);font-family:inherit}
+.cal-header button,.cal-nav button {display:grid;place-items:center;line-height:1;background:white;border:1px solid #d9dde4;border-radius:50%;width:36px;height:36px;font-size:1.5rem;transition:background .13s}
+.cal-header button:hover,.cal-nav button:hover:not(:disabled) {background:#f3eff9}
+.cal-selection {display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:2px 20px 0}
+.cal-selection button {border:1px solid #dde0e6;border-radius:6px;padding:7px 12px;text-align:left;background:white}
+.cal-selection small,.cal-selection strong {display:block}
+.cal-selection small {color:var(--muted);font-size:.72rem}
+.cal-selection strong {font-size:.95rem}
+.cal-selection button[aria-pressed=true] {border-color:var(--purple);background:#f5f1fa}
+.cal-nav {display:flex;align-items:center;justify-content:space-between;padding:12px 20px 4px}
+.cal-instruction {font-size:.82rem;font-weight:600;color:var(--purple)}
+.cal-scroll {overflow-y:auto;overscroll-behavior:contain;min-height:0;padding:0 20px 12px}
+.cal-months {display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.cal-month h3 {font-size:.99rem;text-align:center;letter-spacing:-.02em;margin:6px 0 10px}
+.cal-month h3::first-letter {text-transform:uppercase}
+.cal-week,.cal-grid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center}
+.cal-week {font-size:.69rem;color:var(--muted);font-weight:650;padding-bottom:5px}
+.cal-grid {min-height:calc(6 * 34px);grid-auto-rows:34px;align-content:start}
+button.cal-day {position:relative;background:white;padding:0;border:0;border-radius:4px;min-width:0;color:var(--blue);font-size:.84rem;font-weight:550;font-variant-numeric:tabular-nums;transition:background .13s,color .13s}
+button.cal-day:disabled {cursor:default;color:#9097a2;opacity:.8;text-decoration:line-through;text-decoration-thickness:1px}
+button.cal-day:hover:not(:disabled) {background:#eee7f7}
+button.cal-day.in-range {border-radius:0;background:#eee7f7;color:var(--purple)}
+button.cal-day.departure,button.cal-day.returning,button.cal-day[aria-pressed=true]:hover {color:white;background:var(--purple);opacity:1;text-decoration:none}
+.cal-day.is-today:after {content:'';position:absolute;bottom:3px;left:50%;width:4px;height:4px;background:currentColor;border-radius:50%}
+.cal-day:focus-visible {z-index:1;outline-offset:-2px}
+.cal-footer {display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 20px;border-top:1px solid #e2e4eb}
+.cal-footer>div {display:flex;gap:8px}
+.cal-footer>div button {border:0;background:transparent;font-size:.8rem;color:var(--purple);text-decoration:underline;text-underline-offset:3px;padding:7px 2px;min-height:38px}
+.cal-footer .primary {color:white;min-height:43px;padding:8px 19px}
+@media(min-width:651px) and (max-width:1150px) {
+ #booking .route-fields {grid-template-columns:repeat(4,minmax(0,1fr))}
+ #booking .route-fields>.airport-field {grid-column:span 2}
+}
+@media(max-width:650px) {
+ .horizon-copy {min-height:190px;padding:20px 0 25px}.horizon-copy h1 {font-size:clamp(1.85rem,6.6vw,2.65rem);max-width:53%}
+ .horizon-copy p {font-size:.78rem;max-width:45%;line-height:1.5;margin-top:9px}
+ .horizon-photo {left:48%;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%)}.horizon-photo img {object-position:35% 60%}
+ .brand-horizon:after {left:47%}
+ #booking {margin-top:0}
+ #booking .route-fields {grid-template-columns:1fr 1fr;gap:7px;padding:12px 4% 16px}
+ #booking .route-fields>.airport-field {grid-column:1/-1}
+ #booking .route-fields>.primary {padding-inline:8px}
+ #booking .route-fields>.fieldbox {height:55px}
+ .travel-date b {font-size:.86rem}
+ .trip-calendar {inset:auto 0 0!important;width:100%;max-width:100%;max-height:calc(100dvh - 8px);border-bottom:0;border-radius:17px 17px 0 0;transform:translateY(12px)}
+ .trip-calendar.ready {transform:none}
+ .trip-calendar::backdrop {background:rgb(13 26 51 / .34)}
+ .cal-months {grid-template-columns:1fr;gap:0}
+ .cal-grid {grid-auto-rows:43px;min-height:258px}
+ .cal-nav button,.cal-header button {width:40px;height:40px}
+ .cal-footer {padding-bottom:max(10px,env(safe-area-inset-bottom))}
+ .cal-footer>div {gap:7px}
+}
+@media(prefers-reduced-motion:reduce){.trip-calendar,.cal-day,.route-fields * {transition:none!important;animation:none!important}.trip-calendar,.trip-calendar.closing{transform:none!important}}
+
+/* Airport and passenger pickers float independently of the booking grid. */
+#searchform .selector-panel {
+  position:absolute;z-index:12;top:calc(100% + 7px);bottom:auto;
+  min-width:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+  color:var(--blue);background:#fff;border:1px solid #d6dae2;border-radius:10px;
+  box-shadow:0 10px 30px #142d5924;visibility:hidden;opacity:0;pointer-events:none;
+  transform:translateY(-4px);transition:opacity .15s ease,transform .18s ease,visibility 0s .18s;
+  animation:none;
+}
+#searchform .selector-panel.above {bottom:calc(100% + 7px);top:auto;transform:translateY(4px)}
+#searchform .selector-panel.is-open {visibility:visible;opacity:1;pointer-events:auto;transform:none;transition-delay:0s}
+#searchform .airport-field {cursor:text}
+#searchform .airport-list {padding:5px;margin:0}
+#searchform .airport-list.above {bottom:auto}
+#searchform .airport-list[popover] {position:fixed;right:auto;bottom:auto}
+#searchform .airport-list::backdrop {background:transparent;pointer-events:none}
+.airport-group-title {padding:10px 9px 4px;color:#605372;font-weight:650;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase}
+.airport-list [role=group]+[role=group] {border-top:1px solid #e7e6ed;margin-top:4px}
+.airport-list .airport-option {padding:7px 9px;line-height:1.3;transition:background-color .12s}
+.airport-option strong,.airport-option small {display:block}
+.airport-option strong {font-size:.91rem;font-weight:650}
+.airport-option small {margin:2px 0 0;color:#576477}
+.airport-option b {background:#f3f0f8;border-radius:4px;padding:3px 7px;flex:none}
+.airport-option.active-option,.airport-option:active {background:#ece6f6}
+.route-fields .party-field {padding:0}
+.party-trigger {display:flex;align-items:center;gap:8px;height:100%;width:100%;border:0;background:transparent;text-align:left;padding:6px 9px;border-radius:inherit}
+.party-trigger>.ico {color:var(--purple);width:18px;flex:none}
+.party-trigger>span {min-width:0;line-height:1.25}
+.party-trigger small,.party-trigger b {display:block}
+.party-trigger b {font-size:.87rem;font-weight:620;color:var(--blue)}
+.party-panel {padding:18px}
+.party-panel h3 {margin:0 0 5px;font-size:1.16rem;letter-spacing:-.035em;color:var(--blue)}
+.party-row,.party-total {display:flex;align-items:center;justify-content:space-between;gap:10px}
+.party-row {min-height:57px;border-bottom:1px solid #e5e6eb}
+.party-row strong,.party-row small,.party-total small,.party-total strong {display:block;line-height:1.35}
+.party-row strong {font-size:.92rem}
+.party-row small,.party-total small {font-size:.73rem;color:#5c6779}
+.party-stepper {display:grid;grid-template-columns:32px 20px 32px;align-items:center;gap:3px}
+.party-stepper b {text-align:center;font-size:.95rem;font-variant-numeric:tabular-nums}
+.party-stepper button {padding:0;width:32px;height:32px;border:1px solid #a792c2;border-radius:50%;background:#fff;color:var(--purple);font-size:1.17rem;line-height:1;transition:color .15s,background .15s,transform .15s}
+.party-stepper button:enabled:hover {background:#f1ebf9}
+.party-stepper button:enabled:active {transform:scale(.93)}
+.party-stepper button:disabled {opacity:1;color:#a5aab4;border-color:#e1e3e7;background:#f8f9fb}
+.party-total {padding-top:14px}
+.party-total strong {font-size:1rem}
+.party-panel .party-total .primary {min-height:40px;padding:8px 15px;align-self:center}
+@media(prefers-reduced-motion:reduce) {
+ #searchform .selector-panel,.airport-list .airport-option,.party-stepper button {transition:none}
+}
